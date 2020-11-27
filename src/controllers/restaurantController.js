@@ -61,17 +61,13 @@ const createRestaurant = async (req, res) => {
   }
 };
 
-const test = (req, res) => {
-  res.send("hola");
-};
-
 const getAllRestaurants = async (req, res) => {
   try {
     const allRestaurants = await Restaurant.findAll();
     if (allRestaurants.length === 0) {
-      res.json({ message: "There is no restaurants" });
+      res.status(404).json({ message: "There is no restaurants" });
     } else {
-      res.json({ message: "List of restorants", restaurants: allRestaurants });
+      res.status(200).json({ message: "List of restorants", restaurants: allRestaurants });
     }
   } catch (error) {
     console.log(error);
@@ -88,9 +84,9 @@ const getOneRestaurant = async (req, res) => {
       },
     });
     if (!selectedRestaurant) {
-      res.json({ message: "There is no restaurant with that id" });
+      res.status(404).json({ message: "There is no restaurant with that id" });
     } else {
-      res.json({ message: "Restorant found!", restaurant: selectedRestaurant });
+      res.status(200).json({ message: "Restorant found!", restaurant: selectedRestaurant });
     }
   } catch (error) {
     console.log(error);
@@ -110,14 +106,14 @@ const updateRestaurant = async (req, res) => {
       },
     });
     if (!selectedRestaurant || selectedRestaurant.length === 0) {
-      res.json({ message: "There is no restaurant with that id" });
+      res.status(404).json({ message: "There is no restaurant with that id" });
     } else {
       await Restaurant.update(attributes, {
         where: {
           id: restaurantId,
         },
       });
-      res.json({
+      res.status(200).json({
         message: "Restorant updated!",
       });
     }
@@ -138,14 +134,14 @@ const deleteRestaurant = async (req, res) => {
       },
     });
     if (!selectedRestaurant || selectedRestaurant.length === 0) {
-      res.json({ message: "There is no restaurant with that id" });
+      res.status(404).json({ message: "There is no restaurant with that id" });
     } else {
       await Restaurant.destroy({
         where: {
           id: restaurantId,
         },
       });
-      res.json({
+      res.status(200).json({
         message: "Restorant deleted!",
       });
     }
@@ -181,7 +177,7 @@ const getStatistics = async (req, res) => {
       });
       const avg = mean(justRatings);
       const standarDev = std(justRatings);
-      res.json({
+      res.status(200).json({
         message: `Number of restaurants near point (${latitude}, ${longitude}) with radius of ${radius} meters is ${restaurantsNearPoint.length}`,
         count: restaurantsNearPoint.length,
         avg,
@@ -203,5 +199,4 @@ export default {
   updateRestaurant,
   deleteRestaurant,
   getStatistics,
-  test,
 };
