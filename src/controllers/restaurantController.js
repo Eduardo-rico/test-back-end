@@ -1,4 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
+import { circle, booleanPointInPolygon, point } from "@turf/turf";
+import { mean, std } from "mathjs";
 import Restaurant from "../models/restaurant";
 
 const createRestaurant = async (req, res) => {
@@ -155,11 +157,51 @@ const deleteRestaurant = async (req, res) => {
   }
 };
 
+const getStatistics = async (req, res) => {
+  const { latitude, longitude, radius } = req.query;
+  try {
+    const allRestaurants = await Restaurant.findAll();
+    if (allRestaurants.length === 0) {
+      res.json({ message: "There is no restaurants" });
+    } else {
+      const options = { steps: 36, units: "meters" };
+      const circleArea = circle([longitude, latitude], radius, options);
+      const restaurantsNearPoint = allRestaurants.filter((restaurant) => {
+        const lat = Number(restaurant.lat);
+        const lng = Number(restaurant.lng);
+        const coordinates = [lng, lat];
+        const pt = point(coordinates);
+        const pointInTheArea = booleanPointInPolygon(pt, circleArea);
+        if (pointInTheArea) {
+          return restaurant;
+        }
+      });
+      const justRatings = restaurantsNearPoint.map((location) => {
+        return location.rating;
+      });
+      const avg = mean(justRatings);
+      const standarDev = std(justRatings);
+      res.json({
+        message: `Number of restaurants near point (${latitude}, ${longitude}) with radius of ${radius} meters is ${restaurantsNearPoint.length}`,
+        count: restaurantsNearPoint.length,
+        avg,
+        std: standarDev,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: `I can not retrive the restaurant list because of error: ${error}`,
+    });
+  }
+};
+
 export default {
   createRestaurant,
   getAllRestaurants,
   getOneRestaurant,
   updateRestaurant,
   deleteRestaurant,
+  getStatistics,
   test,
 };

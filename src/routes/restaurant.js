@@ -8,6 +8,7 @@ router
   .post("/", test.createRestaurant)
   .get("/:id", test.getOneRestaurant)
   .put("/:id", test.updateRestaurant)
-  .delete("/:id", test.deleteRestaurant);
+  .delete("/:id", test.deleteRestaurant)
+  .get("/restaurant/statistics", test.getStatistics);
 
 export default router;

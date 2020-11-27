@@ -25,7 +25,9 @@
   },
   "homepage": "https://github.com/Eduardo-rico/test-back-end#readme",
   "dependencies": {
+    "@turf/turf": "^5.1.6",
     "express": "^4.17.1",
+    "mathjs": "^8.0.1",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.5",
