@@ -6,8 +6,8 @@ const router = Router();
 router
   .get("/", test.getAllRestaurants)
   .post("/", test.createRestaurant)
-  .get("/", test.test)
-  .get("/", test.test)
-  .get("/", test.test);
+  .get("/:id", test.getOneRestaurant)
+  .put("/:id", test.updateRestaurant)
+  .delete("/:id", test.deleteRestaurant);
 
 export default router;

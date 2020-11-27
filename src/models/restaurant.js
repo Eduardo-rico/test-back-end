@@ -2,7 +2,7 @@ import Sequelize from "sequelize";
 import sequelize from "../db";
 
 const Restaurant = sequelize.define(
-  "Restaurant",
+  "restaurants",
   {
     id: {
       type: Sequelize.STRING,

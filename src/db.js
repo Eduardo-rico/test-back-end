@@ -1,11 +1,15 @@
 import Sequelize from "sequelize";
 
-const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: "./database.sqlite",
+const sequelize = new Sequelize("db_api", "postgres", "pass", {
+  host: "localhost",
+  dialect: "postgres",
+  pool: {
+    max: 5,
+    min: 0,
+    require: 30000,
+    idle: 10000,
+  },
+  logging: false,
 });
-(async () => {
-  await sequelize.sync({ force: false });
-  // Code here
-})();
+
 export default sequelize;
