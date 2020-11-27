@@ -1,4 +1,5 @@
 import express, { json } from "express";
+import '@babel/polyfill'
 import restaurantRoutes from "./routes/restaurant";
 
 const port = process.env.PORT || 3000;
